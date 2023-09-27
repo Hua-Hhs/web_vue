@@ -1,4 +1,27 @@
+<<<<<<< HEAD
 # mywebvue
+=======
+# demo
+
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
+# Demo
+>>>>>>> 8bfe864 (mywebvue)
 
 #### 介绍
 {**以下是 Gitee 平台说明，您可以替换此简介**
@@ -11,6 +34,7 @@ Gitee 是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN�
 
 #### 安装教程
 
+<<<<<<< HEAD
 1.  xxxx
 2.  xxxx
 3.  xxxx
@@ -21,6 +45,18 @@ Gitee 是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN�
 2.  xxxx
 3.  xxxx
 
+=======
+#### 使用说明
+
+1.  npm install
+2.  npm run serve
+3.  xxxx
+
+    ###效果图
+![输入图片说明](image.png)
+![输入图片说明](image2.png)
+
+>>>>>>> 8bfe864 (mywebvue)
 #### 参与贡献
 
 1.  Fork 本仓库
