@@ -96,11 +96,14 @@ export default {
         // console.log('222')
         this.beginPlay()
 
+        console.log(11)
     },
 
     methods: {
         process_file_info_list(res) {
-            // console.log(res)
+            console.log(res)
+            console.log(11)
+            
 
             this.current_path = res.data.current_path
             // console.log(this.current_path)
@@ -132,11 +135,11 @@ export default {
         },
         // 进入根目录
         beginPlay() {
-            // console.log('333')
+            console.log('333')
             this.$http.get(this.GLOBAL.URL).then(res => {
-                // console.log('1')
+                console.log('1')
                 this.process_file_info_list(res)
-                // console.log('1')
+                console.log('2')
             })
             // console.log('444')
         },
