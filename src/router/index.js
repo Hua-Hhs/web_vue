@@ -10,6 +10,26 @@ const routes = [
     name: 'home',
     component: ()=>import('../views/home.vue')
   },
+  {
+    path: '/videoplayer',
+    name: 'videoplayer',
+    component: ()=>import('../views/videoplayer.vue')
+  },
+  {
+    path: '/videoplayer1',
+    name: 'videoplayer1',
+    component: ()=>import('../views/videoplayer1.vue')
+  },
+  {
+    path: '/filemanager',
+    name: 'filemanager',
+    component: ()=>import('../views/filemanager.vue')
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: ()=>import('../views/test.vue')
+  }
   
  
 ]
