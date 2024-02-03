@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # mywebvue
+=======
+# web_vue
+>>>>>>> f4772e1437921a0a307ca6350d4037ac36c7fb5c
 
 #### Description
 {**When you're done, you can delete the content in this README and update the file with details for others getting started with your repository**}
