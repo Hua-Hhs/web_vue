@@ -1,7 +1,7 @@
 <script>
 
-// const URL = "http://localhost:20000/"; // 生产环境
-const URL = "http://107.174.67.157:22224/"; // 生产环境
+const URL = "http://localhost:20000/"; // 生产环境
+// const URL = "http://107.174.67.157:22225/"; // 生产环境
 // const URL = "http://107.174.67.157:20001/"; // 生产环境
 
 
