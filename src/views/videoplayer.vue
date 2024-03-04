@@ -29,8 +29,8 @@
             <br>
             
             <div class="chapter">
-                <div v-for="(chapter, index) in chapter_list" :key="index">
-                    <el-button v-if="index == current_chapter_index" type="primary"
+                <div v-for="(chapter, index) in episode_title_list" :key="index">
+                    <el-button v-if="index == current_episode_index" type="primary"
                         style="width: 60px; height: 40px; margin-left: 5px;" @click="handle_chapter_button_click(index)">{{
                             chapter }}</el-button>
                     <el-button v-else style="width: 60px; height: 40px; margin-left: 5px;"
@@ -72,10 +72,10 @@ export default {
             },
             videoUrl: '', // 从后端获取的视频资源URL 
             image_list: [],
-            chapter_list: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', 'ova'],
+            episode_title_list: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', 'ova'],
             anime_title_list:[],
             current_anime_title: '',
-            current_chapter_index: '',
+            current_episode_index: '',
 
             videoChunk: null,
             progress: 0,
@@ -90,8 +90,8 @@ export default {
     methods: {
 
         get_video_data() {
-            this.videoUrl = this.GLOBAL.URL + 'handle_video_request?title=' + this.current_anime_title + '&chapter=' + this.chapter_list[0] + '.mp4';
-            console.log(this.videoUrl)
+            this.videoUrl = this.GLOBAL.URL + 'handle_video_request?title=' + this.current_anime_title + '&episode_title=' + this.episode_title_list[0];
+            // console.log(this.videoUrl)
             this.playerOptions.sources[0].src = this.videoUrl
         },
         onPlayerPlay(event) {
@@ -108,18 +108,23 @@ export default {
             console.log(this.$refs.player.buffered)
         },
         handle_image_click(index) {
-            this.get_current_anime_chapter()
-            this.currentAnimeTitle = this.anime_title_list[index]
-            this.videoUrl = this.GLOBAL.URL + 'handle_video_request?title=' + this.anime_title_list[index] + '&chapter=' + this.chapter_list[this.current_chapter_index] + '.mp4';
+            if(this.current_anime_title == this.anime_title_list[index]){
+                return
+            }
+            this.current_anime_title = this.anime_title_list[index]
+            this.get_current_anime_episode_titles()
+            this.videoUrl = this.GLOBAL.URL + 'handle_video_request?title=' + this.anime_title_list[index] + '&episode_title=' + this.episode_title_list[this.current_episode_index];
             this.playerOptions.sources[0].src = this.videoUrl
+            console.log(this.current_anime_title)
             
         },
         // 获取所有动画的信息，包括封面和标题
         get_all_anime_info() {
             this.$http.get(this.GLOBAL.URL + 'get_anime_info').then(res => {
-                // console.log(res.data)
+                console.log(res)
                 this.image_list = []
                 this.anime_title_list = res.data.titles
+                console.log('ready anime_title_list')
                 for (let title of this.anime_title_list) {
                     // 设置cover的路径this.GLOBAL.URL + 'get_anime_cover?title=' + title和显示的标题
                     this.image_list.push({ 'src': this.GLOBAL.URL + 'get_anime_cover?title=' + title, 'description': title })
@@ -128,31 +133,41 @@ export default {
                 console.log(this.anime_title_list)
                 this.current_anime_title = this.anime_title_list[0]
                 console.log(this.current_anime_title)
-                this.current_chapter_index = 0
-                this.get_current_anime_chapter()
+                this.current_episode_index = 0
+                this.get_current_anime_episode_titles()
                 this.get_video_data()
 
 
             })
 
         },
-        get_current_anime_chapter(){
-            var msg={'current_anime_title': this.currentAnimeTitle}
-            this.$http.post(this.GLOBAL.URL + 'get_current_anime_chapter',msg).then(res => {
+        get_current_anime_episode_titles(){
+            if(this.GLOBAL.URL == this.GLOBAL.URL){
+                var msg={'Content-Type': 'application/json', 'anime_title': this.current_anime_title}
+                var api_url = 'get_current_anime_episode_titles/'
 
-                // console.log('get_current_anime_chapter')
-                // console.log(res.data.chapters)
-                this.chapter_list = res.data.chapters
-                
+            }else{
+
+                var msg={'anime_title': this.current_anime_title}
+                var api_url = 'get_current_anime_episode_titles'
+            }
+            this.$http.post(this.GLOBAL.URL + api_url,msg).then(res => {
+                this.episode_title_list = res.data.episode_title_list
+                console.log('get_current_anime_episode_titles')
+                console.log(this.episode_title_list)
+
             })
         },
         handle_chapter_button_click(index) {
             // console.log(index)
-            this.current_chapter_index = index;
-            // console.log(this.currentAnimeTitle+this.chapter_list[index])
-            Cookies.set('current_chapter_index', index, { expires: 180 })
+            if(this.current_episode_index == index){
+                return
+            }
+            this.current_episode_index = index;
+            // console.log(this.currentAnimeTitle+this.episode_title_list[index])
+            Cookies.set('current_episode_index', index, { expires: 180 })
             // console.log(this.image_list[index])
-            this.videoUrl = this.GLOBAL.URL + 'handle_video_request?title=' + this.current_anime_title + '&chapter=' + this.chapter_list[index] + '.mp4';
+            this.videoUrl = this.GLOBAL.URL + 'handle_video_request?title=' + this.current_anime_title + '&episode_title=' + this.episode_title_list[index];
             console.log(this.videoUrl);
             this.playerOptions.sources[0].src = this.videoUrl
             

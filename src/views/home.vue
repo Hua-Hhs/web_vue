@@ -3,8 +3,7 @@
         <div class="left">
             <videoplayer />
         </div>
-        <div class="right">
-            <!-- <div class="right-container"> -->
+        <!-- <div class="right">
             <div class="buttons">
                 <el-button class="button1" @click="onbuttonclick">展开文件列表</el-button>
 
@@ -14,7 +13,7 @@
             <div class="filemanager">
                 <filemanager />
             </div>
-        </div>
+        </div> -->
 
 
         <!-- </div> -->
