@@ -16,8 +16,8 @@ const routes = [
     component: ()=>import('../views/videoplayer.vue')
   },
   {
-    path: '/videoplayer1',
-    name: 'videoplayer1',
+    path: '/video1',
+    name: 'video1',
     component: ()=>import('../views/videoplayer1.vue')
   },
   {

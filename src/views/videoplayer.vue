@@ -21,20 +21,22 @@
                 <div class="video-container">
                     <div class="video-sub-container">
                         <video-player class="vjs-custom-skin" ref="videoPlayer" :options="playerOptions"
-                            @play="onPlayerPlay($event)" @pause="onPlayerPause($event)" @ended="onPlayerEnded($event)">
+                        @play="onPlayerPlay($event)" @pause="onPlayerPause($event)" @ended="onPlayerEnded($event)">
+                        
                         </video-player>
                     </div>
                 </div>
             </template>
             <br>
             
+            <p>             {{current_anime_title }}</p>
             <div class="chapter">
                 <div v-for="(chapter, index) in episode_title_list" :key="index">
                     <el-button v-if="index == current_episode_index" type="primary"
-                        style="width: 60px; height: 40px; margin-left: 5px;" @click="handle_chapter_button_click(index)">{{
+                        style="width: 60px; height: 40px; margin-left: 5px;" @click="handle_episode_button_click(index)">{{
                             chapter }}</el-button>
                     <el-button v-else style="width: 60px; height: 40px; margin-left: 5px;"
-                        @click="handle_chapter_button_click(index)">{{ chapter }}</el-button>
+                        @click="handle_episode_button_click(index)">{{ chapter }}</el-button>
 
                 </div>
             </div>
@@ -73,7 +75,7 @@ export default {
             videoUrl: '', // 从后端获取的视频资源URL 
             image_list: [],
             episode_title_list: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', 'ova'],
-            anime_title_list:[],
+            anime_title_list: [],
             current_anime_title: '',
             current_episode_index: '',
 
@@ -88,11 +90,13 @@ export default {
     },
 
     methods: {
-
+        playNextVideo(){},
         get_video_data() {
             this.videoUrl = this.GLOBAL.URL + 'handle_video_request?title=' + this.current_anime_title + '&episode_title=' + this.episode_title_list[0];
             // console.log(this.videoUrl)
             this.playerOptions.sources[0].src = this.videoUrl
+            console.log('this.playerOptions.sources.length')
+            console.log(this.playerOptions.sources.length)
         },
         onPlayerPlay(event) {
             // console.log('player play!', event)
@@ -104,19 +108,18 @@ export default {
             // console.log('player ended!', event)
         },
         onprogress(event) {  // 当下载时，获取已下载的部分  
-            this.progress = this.$refs.player.buffered.end(0) / this.$refs.player.duration;
-            console.log(this.$refs.player.buffered)
+
         },
         handle_image_click(index) {
-            if(this.current_anime_title == this.anime_title_list[index]){
+            if (this.current_anime_title == this.anime_title_list[index]) {
                 return
             }
             this.current_anime_title = this.anime_title_list[index]
+            this.current_episode_index = 0
             this.get_current_anime_episode_titles()
-            this.videoUrl = this.GLOBAL.URL + 'handle_video_request?title=' + this.anime_title_list[index] + '&episode_title=' + this.episode_title_list[this.current_episode_index];
-            this.playerOptions.sources[0].src = this.videoUrl
-            console.log(this.current_anime_title)
             
+            console.log(this.current_anime_title)
+
         },
         // 获取所有动画的信息，包括封面和标题
         get_all_anime_info() {
@@ -135,33 +138,35 @@ export default {
                 console.log(this.current_anime_title)
                 this.current_episode_index = 0
                 this.get_current_anime_episode_titles()
-                this.get_video_data()
+                // this.get_video_data()
 
 
             })
 
         },
-        get_current_anime_episode_titles(){
-            if(this.GLOBAL.URL == this.GLOBAL.URL){
-                var msg={'Content-Type': 'application/json', 'anime_title': this.current_anime_title}
-                var api_url = 'get_current_anime_episode_titles/'
+        get_current_anime_episode_titles() {
+            // if(this.GLOBAL.URL == this.GLOBAL.URL){
+            var msg = { 'Content-Type': 'application/json', 'anime_title': this.current_anime_title }
+            var api_url = 'get_current_anime_episode_titles/'
+            var request = '?title=' + this.current_anime_title
 
-            }else{
-
-                var msg={'anime_title': this.current_anime_title}
-                var api_url = 'get_current_anime_episode_titles'
-            }
-            this.$http.post(this.GLOBAL.URL + api_url,msg).then(res => {
+            // }else{
+            //     var msg={'anime_title': this.current_anime_title}
+            //     var api_url = 'get_current_anime_episode_titles'
+            // }
+            this.$http.post(this.GLOBAL.URL + api_url, msg).then(res => {
                 this.episode_title_list = res.data.episode_title_list
                 console.log('get_current_anime_episode_titles')
                 console.log(this.episode_title_list)
 
+                this.videoUrl = this.GLOBAL.URL + 'handle_video_request?title=' + this.current_anime_title + '&episode_title=' + this.episode_title_list[this.current_episode_index];
+                this.playerOptions.sources[0].src = this.videoUrl
             })
         },
-        handle_chapter_button_click(index) {
+        handle_episode_button_click(index) {
             // console.log(index)
-            if(this.current_episode_index == index){
-                return
+            if (this.current_episode_index == index) {
+                // return
             }
             this.current_episode_index = index;
             // console.log(this.currentAnimeTitle+this.episode_title_list[index])
@@ -170,7 +175,7 @@ export default {
             this.videoUrl = this.GLOBAL.URL + 'handle_video_request?title=' + this.current_anime_title + '&episode_title=' + this.episode_title_list[index];
             console.log(this.videoUrl);
             this.playerOptions.sources[0].src = this.videoUrl
-            
+
 
         }
     }
@@ -260,4 +265,5 @@ export default {
 
 ::-webkit-scrollbar {
     display: none;
-}</style>
+}
+</style>
